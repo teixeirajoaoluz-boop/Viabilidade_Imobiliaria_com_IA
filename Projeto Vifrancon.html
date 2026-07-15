@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vifrancon | Plataforma de Viabilidade Financeira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN SYSTEM — Terminal de Investimentos Imobiliários
+   Paleta: navy institucional + dourado (referência a "ouro/valor")
+   Tipografia: Inter (UI) + IBM Plex Mono (dados/números — leitura tabular)
+   ============================================================ */
+:root{
+  --navy-950:#0a1526;
+  --navy-900:#0f1e36;
+  --navy-800:#152a49;
+  --navy-700:#1d3a63;
+  --navy-600:#2a4f82;
+  --gold:#c9a961;
+  --gold-light:#e6cf94;
+  --gold-dim:#8a7038;
+  --bg:#f3f5f8;
+  --surface:#ffffff;
+  --surface-2:#f8f9fb;
+  --border:#e1e6ee;
+  --border-strong:#cdd5e2;
+  --text-1:#101828;
+  --text-2:#4a5568;
+  --text-3:#8896a8;
+  --green:#1a8754;
+  --green-bg:#e8f5ee;
+  --red:#c0392b;
+  --red-bg:#fbeae8;
+  --amber:#c47f0a;
+  --amber-bg:#fbf1de;
+  --blue:#2e6bb8;
+  --blue-bg:#eaf1fa;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.06);
+  --shadow-md:0 4px 12px rgba(16,24,40,.08);
+  --shadow-lg:0 12px 32px rgba(16,24,40,.12);
+  --radius:10px;
+  --radius-sm:6px;
+  --sidebar-w:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'Inter',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text-1);
+  font-size:14px;
+  line-height:1.5;
+  overflow:hidden;
+}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-3);}
+
+/* ===== LAYOUT ===== */
+#app{display:flex;height:100vh;width:100vw;}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar-w);
+  background:linear-gradient(180deg,var(--navy-950) 0%,var(--navy-900) 100%);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  flex-shrink:0;
+  border-right:1px solid var(--navy-800);
+}
+.brand{
+  padding:22px 20px 18px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;gap:11px;
+}
+.brand-mark{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold-dim));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;color:var(--navy-950);font-size:15px;flex-shrink:0;
+}
+.brand-text{line-height:1.25;}
+.brand-text strong{display:block;font-size:14.5px;font-weight:700;letter-spacing:.2px;}
+.brand-text span{display:block;font-size:10.5px;color:var(--gold-light);letter-spacing:1.2px;text-transform:uppercase;}
+
+.nav{flex:1;overflow-y:auto;padding:14px 10px;}
+.nav-group-label{
+  font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:14px 12px 6px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 12px;border-radius:8px;cursor:pointer;
+  color:rgba(255,255,255,.72);font-size:13.5px;font-weight:500;
+  transition:background .15s,color .15s;position:relative;margin-bottom:2px;
+  user-select:none;
+}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.85;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:rgba(201,169,97,.14);color:var(--gold-light);}
+.nav-item.active svg{opacity:1;}
+.nav-item.active::before{
+  content:'';position:absolute;left:-10px;top:8px;bottom:8px;width:3px;
+  background:var(--gold);border-radius:0 3px 3px 0;
+}
+.sidebar-footer{
+  padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);
+  font-size:11px;color:rgba(255,255,255,.4);
+}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 6px var(--green);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{
+  height:60px;flex-shrink:0;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;
+}
+.topbar-left h1{font-size:16.5px;font-weight:700;}
+.topbar-left .breadcrumb{font-size:11.5px;color:var(--text-3);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.scenario-pills{display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:3px;gap:2px;}
+.scenario-pill{
+  padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;
+  color:var(--text-2);transition:all .15s;
+}
+.scenario-pill.active{background:var(--navy-900);color:#fff;}
+.btn{
+  padding:8px 14px;border-radius:7px;border:1px solid var(--border-strong);
+  background:var(--surface);color:var(--text-1);font-size:12.5px;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;
+}
+.btn:hover{border-color:var(--navy-700);background:var(--surface-2);}
+.btn-primary{background:var(--navy-900);color:#fff;border-color:var(--navy-900);}
+.btn-primary:hover{background:var(--navy-800);}
+.btn-gold{background:var(--gold);color:var(--navy-950);border-color:var(--gold);}
+.btn-gold:hover{background:var(--gold-light);}
+.btn svg{width:14px;height:14px;}
+
+.content{flex:1;overflow-y:auto;padding:24px 28px 60px;}
+.view{display:none;animation:fadeIn .25s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.view-header{margin-bottom:20px;}
+.view-header h2{font-size:19px;font-weight:800;letter-spacing:-.2px;}
+.view-header p{font-size:12.5px;color:var(--text-3);margin-top:3px;}
+
+/* GRID / CARDS */
+.grid{display:grid;gap:16px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+.grid-6{grid-template-columns:repeat(6,1fr);}
+@media(max-width:1200px){.grid-4{grid-template-columns:repeat(2,1fr);}.grid-6{grid-template-columns:repeat(3,1fr);}}
+
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;box-shadow:var(--shadow-sm);
+}
+.card-title{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.card-title .hint{font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-3);font-size:11px;}
+
+/* KPI CARD */
+.kpi{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;
+}
+.kpi-label{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.kpi-value{font-size:24px;font-weight:700;letter-spacing:-.5px;}
+.kpi-sub{font-size:11.5px;margin-top:6px;font-weight:600;display:flex;align-items:center;gap:4px;}
+.kpi-sub.pos{color:var(--green);}
+.kpi-sub.neg{color:var(--red);}
+.kpi-sub.neutral{color:var(--text-3);}
+.kpi-bar{height:3px;background:var(--border);border-radius:2px;margin-top:12px;overflow:hidden;}
+.kpi-bar>div{height:100%;border-radius:2px;}
+
+/* SEMAFORO */
+.semaforo{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700;}
+.semaforo.verde{background:var(--green-bg);color:var(--green);}
+.semaforo.amarelo{background:var(--amber-bg);color:var(--amber);}
+.semaforo.vermelho{background:var(--red-bg);color:var(--red);}
+.semaforo .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+thead th{
+  background:var(--surface-2);color:var(--text-2);font-weight:700;text-align:right;
+  padding:9px 12px;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;
+  border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1;
+}
+thead th:first-child{text-align:left;}
+tbody td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:12px;}
+tbody td:first-child{text-align:left;font-family:'Inter',sans-serif;font-weight:600;color:var(--text-1);}
+tbody tr:hover{background:var(--surface-2);}
+tbody tr.total-row td{font-weight:700;background:var(--surface-2);border-top:2px solid var(--border-strong);}
+.neg-val{color:var(--red);}
+.pos-val{color:var(--green);}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 18px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11.5px;font-weight:600;color:var(--text-2);display:flex;justify-content:space-between;}
+.field label .val{color:var(--navy-700);font-family:'IBM Plex Mono',monospace;font-weight:700;}
+.field input[type=number],.field input[type=text],.field select{
+  padding:8px 10px;border:1px solid var(--border-strong);border-radius:7px;font-size:13px;
+  font-family:'IBM Plex Mono',monospace;background:var(--surface);color:var(--text-1);
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy-700);box-shadow:0 0 0 3px rgba(29,58,99,.1);}
+.field input[type=range]{width:100%;accent-color:var(--navy-700);}
+.section-label{
+  font-size:12px;font-weight:800;color:var(--navy-800);text-transform:uppercase;letter-spacing:.6px;
+  margin:26px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:inline-block;
+}
+.section-label:first-child{margin-top:0;}
+
+/* CHARTS container */
+.chart-box{width:100%;overflow-x:auto;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--text-2);}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-swatch{width:10px;height:10px;border-radius:3px;}
+
+/* TABS */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.tab{padding:9px 16px;font-size:12.5px;font-weight:600;color:var(--text-3);cursor:pointer;border-bottom:2px solid transparent;}
+.tab.active{color:var(--navy-900);border-bottom-color:var(--gold);}
+
+/* REPORT */
+.report{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px 40px;max-width:880px;margin:0 auto;box-shadow:var(--shadow-md);}
+.report h3{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--gold-dim);margin:24px 0 8px;font-weight:800;}
+.report h3:first-child{margin-top:0;}
+.report p{font-size:13.5px;color:var(--text-1);line-height:1.75;margin-bottom:6px;}
+.report .rec-box{
+  margin-top:22px;padding:18px 20px;border-radius:8px;border-left:4px solid var(--gold);
+  background:linear-gradient(90deg,rgba(201,169,97,.08),transparent);
+}
+
+/* Recommendation badge large */
+.recommend-banner{
+  display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:var(--radius);
+  margin-bottom:20px;border:1px solid var(--border);
+}
+.recommend-banner .icon-circ{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.recommend-banner .icon-circ svg{width:24px;height:24px;}
+.recommend-banner strong{font-size:14.5px;display:block;}
+.recommend-banner span{font-size:12.5px;color:var(--text-2);}
+
+/* Heatmap cell */
+.heat-cell{
+  padding:10px 6px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:700;
+  border:1px solid rgba(255,255,255,.6);
+}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.switch{position:relative;width:40px;height:22px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.slider-tg{position:absolute;cursor:pointer;inset:0;background:var(--border-strong);border-radius:22px;transition:.2s;}
+.slider-tg::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+input:checked+.slider-tg{background:var(--navy-800);}
+input:checked+.slider-tg::before{transform:translateX(18px);}
+
+.info-note{
+  font-size:12px;color:var(--text-2);background:var(--blue-bg);border:1px solid #cfe0f3;
+  padding:10px 14px;border-radius:8px;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start;
+}
+.info-note svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;color:var(--blue);}
+
+footer.app-footer{text-align:center;font-size:11px;color:var(--text-3);padding:18px 0 4px;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">VF</div>
+      <div class="brand-text">
+        <strong>Vifrancon</strong>
+        <span>Viabilidade &amp; FP&amp;A</span>
+      </div>
+    </div>
+    <nav class="nav" id="navMenu"></nav>
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>Motor de cálculo ativo
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard Executivo</h1>
+        <div class="breadcrumb" id="pageBreadcrumb">Vifrancon Construtora / Análise de Investimentos</div>
+      </div>
+      <div class="topbar-right">
+        <div class="scenario-pills" id="scenarioPills">
+          <div class="scenario-pill" data-sc="conservador">Conservador</div>
+          <div class="scenario-pill active" data-sc="base">Base</div>
+          <div class="scenario-pill" data-sc="otimista">Otimista</div>
+        </div>
+        <button class="btn btn-gold" id="btnRecalc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Recalcular
+        </button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+    <footer class="app-footer">Sistema de Análise de Viabilidade Financeira Imobiliária &middot; Uso interno &middot; Modelo desenvolvido conforme boas práticas FAST / FMI / CFI</footer>
+  </div>
+</div>
+
+<script>
+/* ==================================================================================
+   ANALISADOR DE VIABILIDADE FINANCEIRA IMOBILIÁRIA
+   Motor de cálculo + Interface — 100% JavaScript nativo, sem dependências externas
+   ================================================================================== */
+
+/* -------------------------------------------------------------
+   1. FORMATADORES
+------------------------------------------------------------- */
+const fmt = {
+  brl:(v,dec=0)=> (v<0?'-':'') + 'R$ ' + Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec}),
+  brlK:(v)=>{
+    const a=Math.abs(v), s=v<0?'-':'';
+    if(a>=1e6) return s+'R$ '+(a/1e6).toLocaleString('pt-BR',{maximumFractionDigits:2})+'M';
+    if(a>=1e3) return s+'R$ '+(a/1e3).toLocaleString('pt-BR',{maximumFractionDigits:0})+'K';
+    return s+'R$ '+a.toFixed(0);
+  },
+  pct:(v,dec=1)=> (v*100).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+'%',
+  num:(v,dec=0)=> v.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec}),
+  int:(v)=> Math.round(v).toLocaleString('pt-BR'),
+};
+
+/* -------------------------------------------------------------
+   2. ESTADO — PREMISSAS PADRÃO (valores típicos de mercado)
+------------------------------------------------------------- */
+function defaultPremises(){
+  return {
+    // --- Produto ---
+    areaConstruida: 12000,      // m²
+    areaPrivativa: 9000,        // m²
+    unidades: 120,
+    vagas: 240,
+    precoM2: 9500,               // R$/m² sobre área privativa
+
+    // --- Cronograma ---
+    prazoObra: 36,                // meses
+    prazoVendas: 30,               // meses
+    velocidadeVendas: 4.5,         // % VSO ao mês (velocidade alvo)
+    mesInicioVendas: 1,
+
+    // --- Índices macro (% a.a.) ---
+    incc: 6.0,
+    ipca: 4.5,
+    selic: 10.75,
+    tma: 15.0,
+    wacc: 13.0,
+
+    // --- Estrutura de capital ---
+    capitalProprioPct: 35,
+    taxaJurosFinanciamento: 14.0,   // % a.a. sobre dívida
+    custoTerrenoPctVGV: 18,         // % do VGV
+
+    // --- Custos de obra ---
+    custoM2Obra: 4200,              // R$/m² área construída (CAPEX)
+
+    // --- Custos operacionais (% sobre receita reconhecida) ---
+    opexPct: 2.0,
+    custoAdminPct: 3.0,
+    custoComercialPct: 5.0,
+    custoJuridicoPct: 1.0,
+    tributosPct: 4.0,                // RET / regime especial
+    receitasAcessoriasPct: 1.5,      // vagas extra, taxas etc.
+    valorResidual: 0,
+
+    // --- Recebimento (mix de pagamento) ---
+    pctEntrada: 20,
+    pctParcelas: 50,
+    pctRepasse: 30,
+  };
+}
+
+const SCENARIO_MULT = {
+  conservador:{ preco:-0.08, custo:0.10, velocidade:-0.20, prazo:0.10 },
+  base:{ preco:0, custo:0, velocidade:0, prazo:0 },
+  otimista:{ preco:0.08, custo:-0.05, velocidade:0.15, prazo:-0.08 },
+};
+
+let STATE = {
+  premises: defaultPremises(),
+  scenario: 'base',
+  currentView: 'dashboard',
+  model: null,           // resultado do último cálculo (cenário ativo)
+  models: {},             // cache por cenário
+  mcResult: null,
+  sensResult: null,
+  sensVarX: 'preco',
+  sensVarY: 'custo',
+};
+
+/* -------------------------------------------------------------
+   3. MOTOR FINANCEIRO — FUNÇÕES PURAS
+------------------------------------------------------------- */
+
+// Converte taxa anual (%) para taxa mensal equivalente (juros compostos)
+function annualToMonthly(pctAnual){
+  return Math.pow(1 + pctAnual/100, 1/12) - 1;
+}
+
+// VPL de um array de fluxos mensais (fluxo[0] = mês 0)
+function npv(rateMonthly, flows){
+  let v=0;
+  for(let t=0;t<flows.length;t++){ v += flows[t] / Math.pow(1+rateMonthly, t); }
+  return v;
+}
+
+// TIR mensal via bisseção (robusta para fluxos não convencionais)
+function irr(flows){
+  let lo=-0.5, hi=2.0, mid, vMid;
+  let vLo = npv(lo,flows), vHi = npv(hi,flows);
+  if(isNaN(vLo)||isNaN(vHi)) return null;
+  if(vLo*vHi>0){
+    // tenta ampliar
+    hi = 10;
+    vHi = npv(hi, flows);
+    if(vLo*vHi>0) return null;
+  }
+  for(let i=0;i<200;i++){
+    mid=(lo+hi)/2; vMid=npv(mid,flows);
+    if(Math.abs(vMid)<1e-6) break;
+    if((vLo<0&&vMid<0)||(vLo>0&&vMid>0)){ lo=mid; vLo=vMid; } else { hi=mid; }
+  }
+  return mid;
+}
+
+// MIRR mensal
+function mirr(flows, financeRateM, reinvestRateM){
+  let fvPos=0, pvNeg=0;
+  const n = flows.length-1;
+  for(let t=0;t<flows.length;t++){
+    if(flows[t]>0) fvPos += flows[t]*Math.pow(1+reinvestRateM, n-t);
+    else if(flows[t]<0) pvNeg += flows[t]/Math.pow(1+financeRateM, t);
+  }
+  if(pvNeg===0||fvPos<=0) return null;
+  return Math.pow(fvPos/-pvNeg, 1/n) - 1;
+}
+
+function monthlyToAnnual(rM){ return Math.pow(1+rM,12)-1; }
+
+// Curva S (peso normalizado) via função seno — usada para obra e vendas
+function sCurveWeights(n){
+  const raw=[];
+  for(let t=1;t<=n;t++){
+    const x = t/n;
+    raw.push(Math.sin(Math.PI*x) * (0.5 + x*0.5)); // leve viés de aceleração no meio/fim
+  }
+  const sum = raw.reduce((a,b)=>a+b,0);
+  return raw.map(v=>v/sum);
+}
+
+/* -------------------------------------------------------------
+   Construção do modelo completo a partir das premissas
+------------------------------------------------------------- */
+function buildModel(pIn){
+  const p = {...pIn};
+  const horizon = Math.max(p.prazoObra, p.prazoVendas) + 6; // meses pós-entrega p/ repasse
+  const tmaM = annualToMonthly(p.tma);
+  const waccM = annualToMonthly(p.wacc);
+  const inccM = annualToMonthly(p.incc);
+  const ipcaM = annualToMonthly(p.ipca);
+  const jurosM = annualToMonthly(p.taxaJurosFinanciamento);
+
+  const areaPriv = p.areaPrivativa;
+  const precoUnidMedio = (areaPriv/p.unidades) * p.precoM2;
+  const vgv = p.unidades * precoUnidMedio;
+  const custoObraTotal = p.areaConstruida * p.custoM2Obra;
+  const custoTerreno = vgv * (p.custoTerrenoPctVGV/100);
+
+  // ---- Curva de obra (custo mensal, corrigido pelo INCC) ----
+  const obraWeights = sCurveWeights(p.prazoObra);
+  const custoObraMensal = new Array(horizon+1).fill(0);
+  for(let t=1;t<=p.prazoObra;t++){
+    custoObraMensal[t] = custoObraTotal * obraWeights[t-1] * Math.pow(1+inccM, t);
+  }
+
+  // ---- Curva de vendas (unidades vendidas por mês) ----
+  const vendasWeights = sCurveWeights(p.prazoVendas);
+  // ajusta pela velocidade alvo: normaliza e limita VSO a 100%
+  const unidadesVendidasMes = new Array(horizon+1).fill(0);
+  let acumVendas = 0;
+  for(let t=1;t<=p.prazoVendas;t++){
+    let qtd = p.unidades * vendasWeights[t-1];
+    if(acumVendas+qtd > p.unidades) qtd = Math.max(0, p.unidades-acumVendas);
+    unidadesVendidasMes[t] = qtd;
+    acumVendas += qtd;
+  }
+  const vsoFinal = acumVendas / p.unidades;
+
+  // ---- Receita: para cada cohort de venda, agenda entrada + parcelas + repasse ----
+  const receitaMensal = new Array(horizon+1).fill(0);
+  for(let tv=1; tv<=p.prazoVendas; tv++){
+    const qtd = unidadesVendidasMes[tv];
+    if(qtd<=0) continue;
+    const valorCohort = qtd * precoUnidMedio;
+    const entrada = valorCohort * (p.pctEntrada/100);
+    const parcelas = valorCohort * (p.pctParcelas/100);
+    const repasse = valorCohort * (p.pctRepasse/100);
+    const mesEntrega = Math.max(p.prazoObra, tv); // não recebe repasse antes de pronto
+    // Entrada no mês da venda
+    receitaMensal[tv] += entrada;
+    // Parcelas distribuídas até a entrega (mínimo 1 parcela)
+    const mesesParcela = Math.max(1, mesEntrega - tv);
+    const parcelaMes = parcelas / mesesParcela;
+    for(let k=1;k<=mesesParcela;k++){
+      const mIdx = tv+k;
+      if(mIdx<=horizon) receitaMensal[mIdx] += parcelaMes * Math.pow(1+ipcaM, k); // correção IPCA
+    }
+    // Repasse bancário na entrega
+    if(mesEntrega<=horizon) receitaMensal[mesEntrega] += repasse;
+  }
+  const receitaPotencial = vgv;
+  const receitaRealizada = receitaMensal.reduce((a,b)=>a+b,0);
+
+  // Receitas acessórias (proporcional à receita reconhecida)
+  for(let t=0;t<=horizon;t++){
+    receitaMensal[t] += receitaMensal[t] * (p.receitasAcessoriasPct/100);
+  }
+
+  // ---- Custos operacionais (% sobre receita reconhecida no mês) ----
+  const opexMensal=[],adminMensal=[],comercialMensal=[],juridicoMensal=[],tributosMensal=[];
+  for(let t=0;t<=horizon;t++){
+    opexMensal[t]=receitaMensal[t]*(p.opexPct/100);
+    adminMensal[t]=receitaMensal[t]*(p.custoAdminPct/100);
+    comercialMensal[t]=receitaMensal[t]*(p.custoComercialPct/100);
+    juridicoMensal[t]=receitaMensal[t]*(p.tributosPct>0?p.custoJuridicoPct/100:0)*receitaMensal[t]/(receitaMensal[t]||1); // placeholder guard
+    juridicoMensal[t]=receitaMensal[t]*(p.custoJuridicoPct/100);
+    tributosMensal[t]=receitaMensal[t]*(p.tributosPct/100);
+  }
+
+  // ---- Terreno: pago integralmente no mês 1 ----
+  const custoTerrenoMensal = new Array(horizon+1).fill(0);
+  custoTerrenoMensal[1] = custoTerreno;
+
+  // ---- Estrutura de capital / financiamento do gap de caixa ----
+  const capitalProprioPct = p.capitalProprioPct/100;
+  const saldoDevedor = new Array(horizon+1).fill(0);
+  const despesaFinanceira = new Array(horizon+1).fill(0);
+  const aporteProprio = new Array(horizon+1).fill(0);
+  const custoTotalMensal = new Array(horizon+1).fill(0);
+  const fluxoOperacional = new Array(horizon+1).fill(0);
+  const fluxoLivre = new Array(horizon+1).fill(0);
+  const fluxoAcionista = new Array(horizon+1).fill(0);
+  const saldoAcumulado = new Array(horizon+1).fill(0);
+  let saldo=0, divida=0;
+
+  for(let t=0;t<=horizon;t++){
+    const custosMes = custoObraMensal[t]+custoTerrenoMensal[t]+opexMensal[t]+adminMensal[t]+comercialMensal[t]+juridicoMensal[t]+tributosMensal[t];
+    custoTotalMensal[t]=custosMes;
+    const opFlow = receitaMensal[t]-custosMes;
+    fluxoOperacional[t]=opFlow;
+
+    // financiamento: juros sobre saldo devedor anterior
+    const jurosMes = divida*jurosM;
+    despesaFinanceira[t]=jurosMes;
+
+    let netMes = opFlow - jurosMes;
+    // se negativo, parte é coberta por capital próprio, parte por dívida (conforme mix definido)
+    let aporte=0, captacaoDivida=0;
+    if(netMes<0){
+      const necessidade = -netMes;
+      aporte = necessidade*capitalProprioPct;
+      captacaoDivida = necessidade*(1-capitalProprioPct);
+      divida += captacaoDivida;
+      netMes = 0; // o gap é 100% coberto (aporte + dívida)
+    } else if(divida>0){
+      // amortização automática com sobra de caixa
+      const amort = Math.min(divida, netMes);
+      divida -= amort;
+      netMes -= amort;
+    }
+    aporteProprio[t]=aporte;
+    saldoDevedor[t]=divida;
+    saldo += (opFlow - jurosMes); // saldo de caixa nominal do projeto (antes de aportes/dívida) -> para payback do projeto
+    saldoAcumulado[t]=saldo;
+
+    fluxoLivre[t]= opFlow - jurosMes;
+    fluxoAcionista[t]= opFlow - jurosMes + captacaoDivida - aporte*0; // fluxo do ponto de vista do caixa do projeto
+  }
+
+  // Fluxo do acionista "puro": -aportes próprios ao longo do tempo, + resultado residual final
+  const fluxoEquity = new Array(horizon+1).fill(0);
+  let capitalProprioAcumulado=0;
+  for(let t=0;t<=horizon;t++){
+    fluxoEquity[t] = -aporteProprio[t];
+    capitalProprioAcumulado += aporteProprio[t];
+  }
+  // no fim, todo saldo remanescente positivo do fluxo livre não usado para amortizar é devolvido ao acionista
+  // aproximação: soma o fluxo livre residual não capturado no saldo de dívida como distribuição final
+  const totalFluxoLivre = fluxoLivre.reduce((a,b)=>a+b,0);
+  const totalDistribuido = totalFluxoLivre; // simplificação: caixa líquido do projeto = distribuição ao final
+  fluxoEquity[horizon] += Math.max(0, totalDistribuido - fluxoEquity.reduce((a,b)=>a+b,0));
+
+  // ---- Fluxo Descontado ----
+  const fluxoDescontado = fluxoLivre.map((f,t)=> f/Math.pow(1+tmaM,t));
+  const fluxoDescAcumulado = [];
+  fluxoDescontado.reduce((acc,v,i)=>{ const s=acc+v; fluxoDescAcumulado[i]=s; return s; },0);
+
+  // ---- Indicadores financeiros ----
+  const vpl = npv(tmaM, fluxoLivre);
+  const tirM = irr(fluxoLivre);
+  const tirAnual = tirM!==null? monthlyToAnnual(tirM): null;
+  const mirrM = mirr(fluxoLivre, jurosM, tmaM);
+  const mirrAnual = mirrM!==null? monthlyToAnnual(mirrM): null;
+
+  // paybacks
+  let paybackSimples=null;
+  for(let t=0;t<saldoAcumulado.length;t++){ if(saldoAcumulado[t]>=0){ paybackSimples=t; break; } }
+  let paybackDescontado=null, accD=0;
+  for(let t=0;t<fluxoDescontado.length;t++){ accD+=fluxoDescontado[t]; if(accD>=0){ paybackDescontado=t; break; } }
+
+  const custoTotalGeral = custoTotalMensal.reduce((a,b)=>a+b,0);
+  const lucroLiquido = receitaRealizada - custoTotalGeral - despesaFinanceira.reduce((a,b)=>a+b,0);
+  const ebitda = receitaRealizada - (custoObraTotal + custoTerreno + opexMensal.reduce((a,b)=>a+b,0)+adminMensal.reduce((a,b)=>a+b,0)+comercialMensal.reduce((a,b)=>a+b,0)+juridicoMensal.reduce((a,b)=>a+b,0));
+  const margemBruta = (receitaRealizada - custoObraTotal - custoTerreno)/receitaRealizada;
+  const margemLiquida = lucroLiquido/receitaRealizada;
+  const investimentoTotal = custoObraTotal+custoTerreno;
+  const capitalProprioTotal = aporteProprio.reduce((a,b)=>a+b,0) || investimentoTotal*capitalProprioPct;
+  const roi = lucroLiquido/investimentoTotal;
+  const roic = ebitda/investimentoTotal;
+  const indiceLucratividade = 1 + (vpl/investimentoTotal);
+  const valorFuturo = vpl*Math.pow(1+tmaM,horizon);
+  const eva = ebitda - (waccM*12)*investimentoTotal;
+  const moic = capitalProprioTotal>0 ? (capitalProprioTotal+lucroLiquido)/capitalProprioTotal : null;
+  const exposicaoMaxima = Math.min(...saldoAcumulado);
+  const capitalMaximoNecessario = Math.abs(exposicaoMaxima);
+  const necessidadeCapitalGiro = capitalMaximoNecessario*0.15;
+  const pontoEquilibrioUnid = custoTotalGeral / precoUnidMedio;
+  const pontoEquilibrioVSO = pontoEquilibrioUnid/p.unidades;
+
+  const indicadores = {
+    vpl, tirAnual, mirrAnual, paybackSimples, paybackDescontado, roi, roic,
+    indiceLucratividade, valorFuturo, eva, moic, margemBruta, margemLiquida,
+    lucroLiquido, ebitda, pontoEquilibrioUnid, pontoEquilibrioVSO,
+    exposicaoMaxima, capitalMaximoNecessario, necessidadeCapitalGiro,
+    wacc:p.wacc, tma:p.tma, investimentoTotal, capitalProprioTotal
+  };
+
+  const imobiliarios = {
+    precoMedio: precoUnidMedio, precoM2: p.precoM2, vso: vsoFinal,
+    receitaPotencial, receitaRealizada,
+    custoPorUnidade: custoTotalGeral/p.unidades, custoPorM2: custoTotalGeral/p.areaConstruida,
+    margemEmpreendimento: (vgv-custoTotalGeral)/vgv, lucroEmpreendimento: vgv-custoTotalGeral,
+    rentabilidade: lucroLiquido/(capitalProprioTotal||1), lucratividade: margemLiquida,
+    vgv
+  };
+
+  return {
+    premises:p, horizon, tmaM, waccM,
+    meses: Array.from({length:horizon+1},(_,i)=>i),
+    custoObraMensal, unidadesVendidasMes, receitaMensal, opexMensal, adminMensal,
+    comercialMensal, juridicoMensal, tributosMensal, custoTerrenoMensal, custoTotalMensal,
+    fluxoOperacional, fluxoLivre, fluxoAcionista, fluxoEquity, saldoAcumulado,
+    despesaFinanceira, saldoDevedor, aporteProprio,
+    fluxoDescontado, fluxoDescAcumulado,
+    indicadores, imobiliarios,
+    vgv, custoObraTotal, custoTerreno, custoTotalGeral, precoUnidMedio, vsoFinal,
+  };
+}
+
+// Aplica multiplicadores de cenário sobre as premissas base
+function applyScenario(basePremises, scenarioKey){
+  const m = SCENARIO_MULT[scenarioKey];
+  const p = {...basePremises};
+  p.precoM2 = p.precoM2*(1+m.preco);
+  p.custoM2Obra = p.custoM2Obra*(1+m.custo);
+  p.velocidadeVendas = p.velocidadeVendas*(1+m.velocidade);
+  p.prazoVendas = Math.max(6, Math.round(p.prazoVendas*(1 - m.velocidade*0.4)));
+  p.prazoObra = Math.max(6, Math.round(p.prazoObra*(1+m.prazo)));
+  return p;
+}
+
+function recalcAll(){
+  STATE.models = {};
+  ['conservador','base','otimista'].forEach(sc=>{
+    const p = applyScenario(STATE.premises, sc);
+    STATE.models[sc] = buildModel(p);
+  });
+  STATE.model = STATE.models[STATE.scenario];
+}
+
+/* -------------------------------------------------------------
+   4. SENSIBILIDADE / TORNADO / MONTE CARLO
+------------------------------------------------------------- */
+const SENS_VARS = [
+  {key:'preco', label:'Preço de Venda'},
+  {key:'custo', label:'Custo da Obra'},
+  {key:'tma', label:'TMA'},
+  {key:'incc', label:'INCC'},
+  {key:'prazo', label:'Prazo de Obra'},
+  {key:'velocidade', label:'Velocidade de Vendas'},
+  {key:'inflacao', label:'Inflação (IPCA)'},
+  {key:'financiamento', label:'Custo de Financiamento'},
+];
+
+function shockPremises(base, varKey, deltaPct){
+  const p = {...base};
+  switch(varKey){
+    case 'preco': p.precoM2 *= (1+deltaPct); break;
+    case 'custo': p.custoM2Obra *= (1+deltaPct); break;
+    case 'tma': p.tma = p.tma*(1+deltaPct); break;
+    case 'incc': p.incc = p.incc*(1+deltaPct); break;
+    case 'prazo': p.prazoObra = Math.max(6,Math.round(p.prazoObra*(1+deltaPct))); break;
+    case 'velocidade': p.velocidadeVendas = p.velocidadeVendas*(1+deltaPct); p.prazoVendas = Math.max(6,Math.round(p.prazoVendas*(1-deltaPct*0.4))); break;
+    case 'inflacao': p.ipca = p.ipca*(1+deltaPct); break;
+    case 'financiamento': p.taxaJurosFinanciamento = p.taxaJurosFinanciamento*(1+deltaPct); break;
+  }
+  return p;
+}
+
+function computeSensitivityMatrix(basePremises, varX, varY, steps=[-0.2,-0.1,0,0.1,0.2]){
+  const grid=[];
+  steps.forEach(dy=>{
+    const row=[];
+    steps.forEach(dx=>{
+      let p = shockPremises(basePremises, varX, dx);
+      p = shockPremises(p, varY, dy);
+      const m = buildModel(p);
+      row.push(m.indicadores.vpl);
+    });
+    grid.push(row);
+  });
+  return {steps, grid};
+}
+
+function computeTornado(basePremises, deltaPct=0.10){
+  const baseModel = buildModel(basePremises);
+  const baseVPL = baseModel.indicadores.vpl;
+  const rows = SENS_VARS.map(v=>{
+    const lowP = shockPremises(basePremises, v.key, -deltaPct);
+    const highP = shockPremises(basePremises, v.key, deltaPct);
+    const lowVPL = buildModel(lowP).indicadores.vpl;
+    const highVPL = buildModel(highP).indicadores.vpl;
+    // custo e financiamento tem efeito invertido (alta = pior), já capturado naturalmente pelo cálculo
+    const lo = Math.min(lowVPL, highVPL), hi = Math.max(lowVPL, highVPL);
+    return {key:v.key, label:v.label, lo, hi, impact: hi-lo, baseVPL};
+  });
+  rows.sort((a,b)=>b.impact-a.impact);
+  return rows;
+}
+
+// Box-Muller para amostragem normal
+function randNormal(mean, std){
+  let u=0,v=0;
+  while(u===0) u=Math.random();
+  while(v===0) v=Math.random();
+  const z = Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+  return mean + z*std;
+}
+
+function runMonteCarlo(basePremises, iterations=10000){
+  const baseModel = buildModel(basePremises);
+  const tmaM = baseModel.tmaM;
+
+  // tempos médios ponderados (mês médio de receita e de custo) — usados para discretização aproximada
+  let sumRt=0, sumR=0, sumCt=0, sumC=0;
+  baseModel.receitaMensal.forEach((r,t)=>{sumRt+=r*t; sumR+=r;});
+  baseModel.custoTotalMensal.forEach((c,t)=>{sumCt+=c*t; sumC+=c;});
+  const tRevenue = sumR>0? sumRt/sumR : baseModel.horizon*0.6;
+  const tCost = sumC>0? sumCt/sumC : baseModel.horizon*0.4;
+
+  const vgvBase = baseModel.vgv;
+  const custoBase = baseModel.custoTotalGeral;
+
+  const npls=[], tirs=[];
+  const sigma = {preco:0.07, custo:0.09, inflacao:0.15, prazo:0.12, velocidade:0.18};
+
+  for(let i=0;i<iterations;i++){
+    const mPreco = randNormal(1, sigma.preco);
+    const mCusto = randNormal(1, sigma.custo);
+    const mInfl = randNormal(1, sigma.inflacao);
+    const mPrazo = randNormal(1, sigma.prazo);
+    const mVel = Math.max(0.3, randNormal(1, sigma.velocidade));
+
+    const vgv_i = vgvBase * mPreco * Math.min(1, mVel);
+    const custo_i = custoBase * mCusto * (1 + Math.max(0,mPrazo-1)*0.4) * (1 + Math.max(0,mInfl-1)*0.2);
+
+    const tR = tRevenue * (2-Math.min(1.6,mVel)); // vendas mais lentas empurram receita no tempo
+    const tC = tCost * mPrazo;
+
+    const vpl_i = vgv_i/Math.pow(1+tmaM, Math.max(1,tR)) - custo_i/Math.pow(1+tmaM, Math.max(1,tC));
+    npls.push(vpl_i);
+
+    const dt = Math.max(1, tR-tC);
+    let tir_i = null;
+    if(custo_i>0 && vgv_i>0){
+      const razão = vgv_i/custo_i;
+      const tirMensal_i = Math.pow(razão, 1/dt) - 1;
+      tir_i = monthlyToAnnual(tirMensal_i);
+    }
+    if(tir_i!==null && isFinite(tir_i)) tirs.push(tir_i);
+  }
+
+  npls.sort((a,b)=>a-b);
+  tirs.sort((a,b)=>a-b);
+  const pct = (arr,p)=> arr[Math.floor(arr.length*p)];
+  const mean = arr=> arr.reduce((a,b)=>a+b,0)/arr.length;
+  const probNeg = npls.filter(v=>v<0).length/npls.length;
+  const probTirAbaixoTMA = tirs.filter(v=>v<basePremises.tma/100).length/tirs.length;
+
+  return {
+    npls, tirs,
+    npvMean: mean(npls),
+    npvStd: Math.sqrt(mean(npls.map(v=>(v-mean(npls))**2))),
+    tirMean: mean(tirs),
+    percentiles:{p5:pct(npls,.05),p10:pct(npls,.10),p25:pct(npls,.25),p50:pct(npls,.50),p75:pct(npls,.75),p90:pct(npls,.90),p95:pct(npls,.95)},
+    probNeg, probSucesso: 1-probNeg, probTirAbaixoTMA,
+    iterations
+  };
+}
+
+/* -------------------------------------------------------------
+   5. RENDERIZAÇÃO SVG — GRÁFICOS NATIVOS
+------------------------------------------------------------- */
+const SVGNS='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs){
+  const el=document.createElementNS(SVGNS,tag);
+  for(const k in attrs) el.setAttribute(k,attrs[k]);
+  return el;
+}
+
+// Gráfico de linha/área simples (uma ou duas séries)
+function renderLineChart(container, series, opts={}){
+  const w=opts.width||760, h=opts.height||260, pad={t:16,r:16,b:28,l:64};
+  const allVals = series.flatMap(s=>s.data);
+  let min=Math.min(0,...allVals), max=Math.max(...allVals);
+  if(min===max){min-=1;max+=1;}
+  const range = max-min;
+  const n = series[0].data.length;
+  const x = i => pad.l + (i/(n-1))*(w-pad.l-pad.r);
+  const y = v => h-pad.b - ((v-min)/range)*(h-pad.t-pad.b);
+
+  const svg = svgEl('svg',{viewBox:`0 0 ${w} ${h}`,width:'100%',height:h});
+
+  // grid
+  const gridN=5;
+  for(let i=0;i<=gridN;i++){
+    const gv = min + (range*i/gridN);
+    const gy = y(gv);
+    svg.appendChild(svgEl('line',{x1:pad.l,x2:w-pad.r,y1:gy,y2:gy,stroke:'#e6eaf1','stroke-width':1}));
+    const t=svgEl('text',{x:pad.l-8,y:gy+4,'text-anchor':'end','font-size':10,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t.textContent = fmt.brlK(gv);
+    svg.appendChild(t);
+  }
+  // zero line emphasis
+  if(min<0&&max>0){
+    svg.appendChild(svgEl('line',{x1:pad.l,x2:w-pad.r,y1:y(0),y2:y(0),stroke:'#8896a8','stroke-width':1.4}));
+  }
+
+  series.forEach(s=>{
+    let d='';
+    s.data.forEach((v,i)=>{ d+= (i===0?'M':'L')+x(i)+','+y(v)+' '; });
+    if(s.area){
+      let dArea = d + `L${x(n-1)},${y(min)} L${x(0)},${y(min)} Z`;
+      svg.appendChild(svgEl('path',{d:dArea, fill:s.color, 'fill-opacity':0.12, stroke:'none'}));
+    }
+    svg.appendChild(svgEl('path',{d, fill:'none', stroke:s.color, 'stroke-width':2}));
+  });
+
+  // x axis labels (sparse)
+  const step = Math.ceil(n/10);
+  for(let i=0;i<n;i+=step){
+    const t=svgEl('text',{x:x(i),y:h-8,'text-anchor':'middle','font-size':9.5,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t.textContent = 'M'+i;
+    svg.appendChild(t);
+  }
+  container.innerHTML='';
+  container.appendChild(svg);
+}
+
+// Gráfico de barras (uma série)
+function renderBarChart(container, labels, data, opts={}){
+  const w=opts.width||760, h=opts.height||220, pad={t:16,r:16,b:34,l:64};
+  const min=Math.min(0,...data), max=Math.max(...data,1);
+  const range=(max-min)||1;
+  const bw = (w-pad.l-pad.r)/data.length;
+  const y = v => h-pad.b-((v-min)/range)*(h-pad.t-pad.b);
+  const svg = svgEl('svg',{viewBox:`0 0 ${w} ${h}`,width:'100%',height:h});
+  for(let i=0;i<=4;i++){
+    const gv=min+range*i/4, gy=y(gv);
+    svg.appendChild(svgEl('line',{x1:pad.l,x2:w-pad.r,y1:gy,y2:gy,stroke:'#e6eaf1'}));
+    const t=svgEl('text',{x:pad.l-8,y:gy+4,'text-anchor':'end','font-size':10,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t.textContent=fmt.brlK(gv); svg.appendChild(t);
+  }
+  data.forEach((v,i)=>{
+    const bx = pad.l + i*bw + bw*0.15;
+    const bh = Math.abs(y(v)-y(0));
+    const by = v>=0? y(v): y(0);
+    svg.appendChild(svgEl('rect',{x:bx,y:by,width:bw*0.7,height:Math.max(1,bh),fill:v>=0?'#1a8754':'#c0392b','rx':2}));
+  });
+  const step=Math.ceil(data.length/12);
+  labels.forEach((l,i)=>{
+    if(i%step!==0) return;
+    const t=svgEl('text',{x:pad.l+i*bw+bw/2,y:h-8,'text-anchor':'middle','font-size':9.5,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t.textContent=l; svg.appendChild(t);
+  });
+  container.innerHTML=''; container.appendChild(svg);
+}
+
+// Histograma
+function renderHistogram(container, data, opts={}){
+  const w=opts.width||520,h=opts.height||220,pad={t:14,r:14,b:30,l:14};
+  const bins=opts.bins||28;
+  const min=Math.min(...data), max=Math.max(...data);
+  const bw=(max-min)/bins || 1;
+  const counts=new Array(bins).fill(0);
+  data.forEach(v=>{ let idx=Math.floor((v-min)/bw); if(idx>=bins)idx=bins-1; if(idx<0)idx=0; counts[idx]++; });
+  const maxC=Math.max(...counts,1);
+  const bwPx=(w-pad.l-pad.r)/bins;
+  const svg=svgEl('svg',{viewBox:`0 0 ${w} ${h}`,width:'100%',height:h});
+  const zeroIdx = Math.floor((0-min)/bw);
+  counts.forEach((c,i)=>{
+    const bx=pad.l+i*bwPx, bh=(c/maxC)*(h-pad.t-pad.b), by=h-pad.b-bh;
+    const binStart = min+i*bw;
+    const color = (opts.colorByZero && binStart<0)? '#c0392b':(opts.color||'#2a4f82');
+    svg.appendChild(svgEl('rect',{x:bx+0.5,y:by,width:Math.max(0,bwPx-1),height:bh,fill:color,'fill-opacity':0.82}));
+  });
+  // linha zero
+  if(opts.colorByZero && min<0 && max>0){
+    const zx = pad.l + ((0-min)/(max-min))*(w-pad.l-pad.r);
+    svg.appendChild(svgEl('line',{x1:zx,x2:zx,y1:pad.t,y2:h-pad.b,stroke:'#101828','stroke-width':1.4,'stroke-dasharray':'3,3'}));
+  }
+  const t1=svgEl('text',{x:pad.l,y:h-6,'font-size':9.5,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+  t1.textContent=opts.fmt? opts.fmt(min):fmt.brlK(min); svg.appendChild(t1);
+  const t2=svgEl('text',{x:w-pad.r,y:h-6,'text-anchor':'end','font-size':9.5,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+  t2.textContent=opts.fmt? opts.fmt(max):fmt.brlK(max); svg.appendChild(t2);
+  container.innerHTML=''; container.appendChild(svg);
+}
+
+// Tornado chart
+function renderTornado(container, rows, opts={}){
+  const w=opts.width||760, rowH=34, h=rows.length*rowH+30, pad={l:190,r:60,t:10,b:20};
+  const baseVPL = rows[0].baseVPL;
+  const maxAbs = Math.max(...rows.map(r=>Math.max(Math.abs(r.lo-baseVPL),Math.abs(r.hi-baseVPL))));
+  const cx = pad.l + (w-pad.l-pad.r)/2;
+  const scale = (w-pad.l-pad.r)/2 / (maxAbs||1);
+  const svg=svgEl('svg',{viewBox:`0 0 ${w} ${h}`,width:'100%',height:h});
+  svg.appendChild(svgEl('line',{x1:cx,x2:cx,y1:pad.t,y2:h-pad.b,stroke:'#8896a8','stroke-width':1.2}));
+  rows.forEach((r,i)=>{
+    const yc = pad.t + i*rowH + rowH/2;
+    const xLo = cx + (r.lo-baseVPL)*scale;
+    const xHi = cx + (r.hi-baseVPL)*scale;
+    const x1 = Math.min(xLo,xHi), x2=Math.max(xLo,xHi);
+    svg.appendChild(svgEl('rect',{x:x1,y:yc-9,width:Math.max(2,x2-x1),height:18,fill:'#c9a961','rx':3,'fill-opacity':0.85}));
+    const lbl=svgEl('text',{x:pad.l-12,y:yc+4,'text-anchor':'end','font-size':11.5,fill:'#101828','font-weight':600});
+    lbl.textContent=r.label; svg.appendChild(lbl);
+  });
+  container.innerHTML=''; container.appendChild(svg);
+}
+
+// Heatmap de sensibilidade
+function renderHeatmap(container, steps, grid, baseVPL, labelX, labelY){
+  const cell=70, pad={l:90,t:34};
+  const w = pad.l + cell*steps.length + 10;
+  const h = pad.t + cell*steps.length + 10;
+  const flat=grid.flat();
+  const min=Math.min(...flat), max=Math.max(...flat);
+  const svg=svgEl('svg',{viewBox:`0 0 ${w} ${h}`,width:'100%',height:h});
+  // título eixos
+  const tX=svgEl('text',{x:pad.l+cell*steps.length/2,y:16,'text-anchor':'middle','font-size':11,fill:'#4a5568','font-weight':700});
+  tX.textContent=labelX+' →'; svg.appendChild(tX);
+  const tY=svgEl('text',{x:14,y:pad.t+cell*steps.length/2,'text-anchor':'middle','font-size':11,fill:'#4a5568','font-weight':700,transform:`rotate(-90 14 ${pad.t+cell*steps.length/2})`});
+  tY.textContent=labelY+' →'; svg.appendChild(tY);
+
+  steps.forEach((s,i)=>{
+    const t=svgEl('text',{x:pad.l+i*cell+cell/2,y:pad.t-8,'text-anchor':'middle','font-size':10,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t.textContent=(s>0?'+':'')+(s*100).toFixed(0)+'%'; svg.appendChild(t);
+    const t2=svgEl('text',{x:pad.l-8,y:pad.t+i*cell+cell/2+4,'text-anchor':'end','font-size':10,fill:'#8896a8','font-family':'IBM Plex Mono, monospace'});
+    t2.textContent=(s>0?'+':'')+(s*100).toFixed(0)+'%'; svg.appendChild(t2);
+  });
+
+  grid.forEach((row,yi)=>{
+    row.forEach((val,xi)=>{
+      const ratio = max>min? (val-min)/(max-min) : 0.5;
+      // vermelho -> amarelo -> verde
+      const color = heatColor(ratio);
+      const rx=pad.l+xi*cell, ry=pad.t+yi*cell;
+      svg.appendChild(svgEl('rect',{x:rx,y:ry,width:cell,height:cell,fill:color}));
+      const t=svgEl('text',{x:rx+cell/2,y:ry+cell/2+4,'text-anchor':'middle','font-size':10.5,fill:ratio>0.5&&ratio<0.85?'#101828':'#fff','font-weight':700,'font-family':'IBM Plex Mono, monospace'});
+      t.textContent=fmt.brlK(val); svg.appendChild(t);
+    });
+  });
+  container.innerHTML=''; container.appendChild(svg);
+}
+function heatColor(ratio){
+  // 0 -> vermelho (192,57,43) | .5 -> amber (196,127,10) | 1 -> verde (26,135,84)
+  const stops=[[192,57,43],[196,127,10],[26,135,84]];
+  const seg = ratio<0.5? [stops[0],stops[1],ratio*2] : [stops[1],stops[2],(ratio-0.5)*2];
+  const [c1,c2,f]=seg;
+  const r=Math.round(c1[0]+(c2[0]-c1[0])*f);
+  const g=Math.round(c1[1]+(c2[1]-c1[1])*f);
+  const b=Math.round(c1[2]+(c2[2]-c1[2])*f);
+  return `rgb(${r},${g},${b})`;
+}
+
+// Donut simples (VSO)
+function renderDonut(container, pct, opts={}){
+  const size=opts.size||120, r=size*0.38, cx=size/2, cy=size/2, sw=opts.strokeWidth||12;
+  const circumference=2*Math.PI*r;
+  const dash=circumference*pct;
+  const svg=svgEl('svg',{viewBox:`0 0 ${size} ${size}`,width:size,height:size});
+  svg.appendChild(svgEl('circle',{cx,cy,r,fill:'none',stroke:'#e6eaf1','stroke-width':sw}));
+  const c=svgEl('circle',{cx,cy,r,fill:'none',stroke:opts.color||'#c9a961','stroke-width':sw,'stroke-dasharray':`${dash} ${circumference}`,'stroke-linecap':'round',transform:`rotate(-90 ${cx} ${cy})`});
+  svg.appendChild(c);
+  const t=svgEl('text',{x:cx,y:cy+5,'text-anchor':'middle','font-size':17,'font-weight':800,fill:'#101828'});
+  t.textContent=(pct*100).toFixed(0)+'%';
+  svg.appendChild(t);
+  container.innerHTML=''; container.appendChild(svg);
+}
+
+/* -------------------------------------------------------------
+   6. NAVEGAÇÃO
+------------------------------------------------------------- */
+const NAV_ICONS = {
+  dashboard:'<path d="M3 13h4v8H3zM10 3h4v18h-4zM17 8h4v13h-4z"/>',
+  premissas:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',
+  cronograma:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  fluxo:'<path d="M3 3v18h18"/><path d="M18.7 8L13 13.7l-4-4L3 16"/>',
+  fcd:'<path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/>',
+  indicadores:'<rect x="3" y="12" width="4" height="9"/><rect x="10" y="6" width="4" height="15"/><rect x="17" y="9" width="4" height="12"/>',
+  cenarios:'<path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>',
+  sensibilidade:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',
+  montecarlo:'<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
+  relatorios:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/>',
+  config:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',
+};
+const NAV_ITEMS = [
+  {group:'Visão Geral', items:[
+    {id:'dashboard', label:'Dashboard Executivo'},
+  ]},
+  {group:'Modelagem', items:[
+    {id:'premissas', label:'Premissas'},
+    {id:'cronograma', label:'Cronograma'},
+    {id:'fluxo', label:'Fluxo de Caixa'},
+    {id:'fcd', label:'Fluxo Descontado'},
+  ]},
+  {group:'Análise', items:[
+    {id:'indicadores', label:'Indicadores'},
+    {id:'cenarios', label:'Cenários'},
+    {id:'sensibilidade', label:'Sensibilidade'},
+    {id:'montecarlo', label:'Monte Carlo'},
+  ]},
+  {group:'Saída', items:[
+    {id:'relatorios', label:'Relatórios'},
+    {id:'config', label:'Configurações'},
+  ]},
+];
+
+function buildNav(){
+  const nav = document.getElementById('navMenu');
+  nav.innerHTML='';
+  NAV_ITEMS.forEach(group=>{
+    const gl = document.createElement('div');
+    gl.className='nav-group-label'; gl.textContent=group.group;
+    nav.appendChild(gl);
+    group.items.forEach(it=>{
+      const div=document.createElement('div');
+      div.className='nav-item'+(it.id===STATE.currentView?' active':'');
+      div.dataset.view=it.id;
+      div.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${NAV_ICONS[it.id]}</svg><span>${it.label}</span>`;
+      div.addEventListener('click',()=>{ navigateTo(it.id); });
+      nav.appendChild(div);
+    });
+  });
+}
+
+const VIEW_TITLES = {
+  dashboard:['Dashboard Executivo','Visão consolidada do empreendimento'],
+  premissas:['Premissas do Modelo','Parametrização completa das variáveis do projeto'],
+  cronograma:['Cronograma Físico-Financeiro','Curvas de obra e vendas ao longo do horizonte do projeto'],
+  fluxo:['Fluxo de Caixa','Demonstrativo mensal completo de entradas e saídas'],
+  fcd:['Fluxo de Caixa Descontado','Valor presente dos fluxos e convergência do VPL'],
+  indicadores:['Indicadores Financeiros','Métricas de retorno, risco e rentabilidade'],
+  cenarios:['Análise de Cenários','Comparativo Conservador · Base · Otimista'],
+  sensibilidade:['Análise de Sensibilidade','Matriz dinâmica e Tornado Chart'],
+  montecarlo:['Simulação de Monte Carlo','10.000 iterações — distribuição probabilística de resultados'],
+  relatorios:['Relatório Executivo','Parecer técnico gerado automaticamente'],
+  config:['Configurações','Preferências do sistema e exportação de dados'],
+};
+
+function navigateTo(viewId){
+  STATE.currentView = viewId;
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.toggle('active', el.dataset.view===viewId));
+  document.getElementById('pageTitle').textContent = VIEW_TITLES[viewId][0];
+  document.getElementById('pageBreadcrumb').textContent = 'Vifrancon Construtora / '+VIEW_TITLES[viewId][0];
+  renderView(viewId);
+}
+
+/* -------------------------------------------------------------
+   7. RENDER DE VIEWS
+------------------------------------------------------------- */
+function renderView(id){
+  const c = document.getElementById('content');
+  c.innerHTML = '<div class="view active" id="viewRoot"></div>';
+  const root = document.getElementById('viewRoot');
+  const fns = {
+    dashboard:renderDashboard, premissas:renderPremissas, cronograma:renderCronograma,
+    fluxo:renderFluxo, fcd:renderFCD, indicadores:renderIndicadores, cenarios:renderCenarios,
+    sensibilidade:renderSensibilidade, montecarlo:renderMonteCarlo, relatorios:renderRelatorios,
+    config:renderConfig,
+  };
+  fns[id](root);
+}
+
+/* ---------- 7.1 DASHBOARD ---------- */
+function renderDashboard(root){
+  const m = STATE.model, ind=m.indicadores, imo=m.imobiliarios;
+  const statusTIR = ind.tirAnual>ind.tma/100 ? 'verde' : (ind.tirAnual>ind.tma/100*0.85?'amarelo':'vermelho');
+  const statusVPL = ind.vpl>0 ? 'verde':'vermelho';
+  const statusPayback = ind.paybackSimples<m.horizon*0.75?'verde':(ind.paybackSimples<m.horizon?'amarelo':'vermelho');
+
+  const scoreCount = {verde:0,amarelo:0,vermelho:0};
+  [statusTIR,statusVPL,statusPayback].forEach(s=>scoreCount[s]++);
+  let overall='amarelo', overallText='Aprovação condicionada — recomenda-se revisão de premissas';
+  let overallIcon='amber';
+  if(scoreCount.vermelho===0 && scoreCount.verde>=2){overall='verde'; overallText='Empreendimento recomendado para aprovação';}
+  if(scoreCount.vermelho>=2){overall='vermelho'; overallText='Empreendimento não recomendado nas condições atuais';}
+
+  root.innerHTML = `
+  <div class="view-header"><h2>Dashboard Executivo</h2><p>Cenário ativo: <strong>${STATE.scenario.toUpperCase()}</strong> &middot; Horizonte de ${m.horizon} meses &middot; VGV ${fmt.brlK(m.vgv)}</p></div>
+
+  <div class="recommend-banner" style="background:${overall==='verde'?'var(--green-bg)':overall==='amarelo'?'var(--amber-bg)':'var(--red-bg)'}">
+    <div class="icon-circ" style="background:${overall==='verde'?'#1a8754':overall==='amarelo'?'#c47f0a':'#c0392b'}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <div><strong>${overallText}</strong><span>Baseado em TIR vs TMA, VPL e prazo de payback frente ao horizonte do projeto</span></div>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:16px;">
+    ${kpiCard('VPL do Projeto', fmt.brlK(ind.vpl), ind.vpl>0?'Positivo — cria valor':'Negativo — destrói valor', ind.vpl>0?'pos':'neg', Math.min(100,Math.abs(ind.vpl/m.vgv*100)))}
+    ${kpiCard('TIR Anual', fmt.pct(ind.tirAnual,2), 'TMA: '+fmt.pct(ind.tma/100,1), ind.tirAnual>ind.tma/100?'pos':'neg', Math.min(100,ind.tirAnual*100*3))}
+    ${kpiCard('Payback Descontado', ind.paybackDescontado+' meses', 'de '+m.horizon+' meses de horizonte', 'neutral', Math.min(100,(ind.paybackDescontado/m.horizon)*100))}
+    ${kpiCard('ROI', fmt.pct(ind.roi,1), 'sobre investimento total', ind.roi>0.15?'pos':'neutral', Math.min(100,ind.roi*100*2))}
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:20px;">
+    ${kpiCard('VSO', fmt.pct(imo.vso,1), fmt.int(m.premises.unidades*imo.vso)+' de '+m.premises.unidades+' unidades', 'neutral')}
+    ${kpiCard('Margem do Empreendimento', fmt.pct(imo.margemEmpreendimento,1), 'Lucro: '+fmt.brlK(imo.lucroEmpreendimento), imo.margemEmpreendimento>0.2?'pos':'amarelo'==='amarelo'?'neutral':'neg')}
+    ${kpiCard('Exposição Máxima de Caixa', fmt.brlK(ind.exposicaoMaxima), 'Capital máx. necessário: '+fmt.brlK(ind.capitalMaximoNecessario), 'neg')}
+    ${kpiCard('MOIC', ind.moic? ind.moic.toFixed(2)+'x':'—', 'Múltiplo sobre capital investido', 'neutral')}
+  </div>
+
+  <div class="grid" style="grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Fluxo de Caixa Acumulado <span class="hint">nominal, R$</span></div>
+      <div class="chart-box" id="dashChart"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Status do Empreendimento</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${statusRow('TIR vs TMA', statusTIR, fmt.pct(ind.tirAnual,1)+' vs '+fmt.pct(ind.tma/100,1))}
+        ${statusRow('VPL', statusVPL, fmt.brlK(ind.vpl))}
+        ${statusRow('Payback', statusPayback, ind.paybackDescontado+' / '+m.horizon+' meses')}
+        ${statusRow('Margem Líquida', ind.margemLiquida>0.12?'verde':ind.margemLiquida>0?'amarelo':'vermelho', fmt.pct(ind.margemLiquida,1))}
+        ${statusRow('Índice de Lucratividade', ind.indiceLucratividade>1.15?'verde':ind.indiceLucratividade>1?'amarelo':'vermelho', ind.indiceLucratividade.toFixed(2))}
+      </div>
+      <div class="card-title" style="margin-top:20px;">Ranking de Riscos</div>
+      <div id="dashTornadoMini" class="chart-box"></div>
+    </div>
+  </div>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="card-title">VSO — Vendas sobre Oferta</div>
+      <div style="display:flex;align-items:center;gap:18px;">
+        <div id="dashDonut"></div>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.8;">
+          <div>Receita potencial: <strong class="mono">${fmt.brlK(imo.receitaPotencial)}</strong></div>
+          <div>Receita realizada: <strong class="mono">${fmt.brlK(imo.receitaRealizada)}</strong></div>
+          <div>Preço médio/m²: <strong class="mono">${fmt.brl(imo.precoM2)}</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Estrutura de Custos</div>
+      <div id="dashCostBar" class="chart-box"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Capital Investido</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:12.5px;">
+        <div style="display:flex;justify-content:space-between;"><span>Investimento Total</span><strong class="mono">${fmt.brlK(ind.investimentoTotal)}</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Capital Próprio</span><strong class="mono">${fmt.brlK(ind.capitalProprioTotal)}</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>Capital de Terceiros</span><strong class="mono">${fmt.brlK(ind.investimentoTotal-ind.capitalProprioTotal)}</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>WACC</span><strong class="mono">${fmt.pct(ind.wacc/100,1)}</strong></div>
+        <div style="display:flex;justify-content:space-between;"><span>EVA</span><strong class="mono ${ind.eva>0?'pos-val':'neg-val'}">${fmt.brlK(ind.eva)}</strong></div>
+      </div>
+    </div>
+  </div>
+  `;
+  renderLineChart(document.getElementById('dashChart'), [{data:m.saldoAcumulado,color:'#c9a961',area:true}]);
+  renderDonut(document.getElementById('dashDonut'), imo.vso, {color:'#c9a961', size:110});
+  const costLabels=['Obra','Terreno','Comercial','Admin','Tributos','Opex'];
+  const costVals=[m.custoObraTotal, m.custoTerreno, m.comercialMensal.reduce((a,b)=>a+b,0), m.adminMensal.reduce((a,b)=>a+b,0), m.tributosMensal.reduce((a,b)=>a+b,0), m.opexMensal.reduce((a,b)=>a+b,0)];
+  renderBarChart(document.getElementById('dashCostBar'), costLabels, costVals, {height:190});
+  const torRows = computeTornado(STATE.premises).slice(0,5);
+  renderTornado(document.getElementById('dashTornadoMini'), torRows, {width:340});
+}
+function kpiCard(label,value,sub,cls,barPct){
+  return `<div class="kpi"><div class="kpi-label">${label}</div><div class="kpi-value mono">${value}</div><div class="kpi-sub ${cls}">${sub}</div>${barPct!==undefined?`<div class="kpi-bar"><div style="width:${Math.max(4,Math.min(100,barPct))}%;background:${cls==='pos'?'var(--green)':cls==='neg'?'var(--red)':'var(--gold)'}"></div></div>`:''}</div>`;
+}
+function statusRow(label,status,detail){
+  const map={verde:'Adequado',amarelo:'Atenção',vermelho:'Crítico'};
+  return `<div style="display:flex;align-items:center;justify-content:space-between;">
+    <div><div style="font-size:12.5px;font-weight:600;">${label}</div><div style="font-size:11px;color:var(--text-3);" class="mono">${detail}</div></div>
+    <span class="semaforo ${status}"><span class="dot"></span>${map[status]}</span>
+  </div>`;
+}
+
+/* ---------- 7.2 PREMISSAS ---------- */
+function renderPremissas(root){
+  const p = STATE.premises;
+  const field = (key,label,step=1,suffix='')=>`
+    <div class="field"><label>${label} <span class="val">${p[key]}${suffix}</span></label>
+      <input type="number" step="${step}" value="${p[key]}" data-key="${key}">
+    </div>`;
+  root.innerHTML = `
+  <div class="view-header"><h2>Premissas do Modelo</h2><p>Ajuste os parâmetros e clique em Recalcular para atualizar todo o sistema</p></div>
+
+  <div class="card">
+    <div class="section-label">Produto</div>
+    <div class="form-grid">
+      ${field('areaConstruida','Área Construída (m²)',10)}
+      ${field('areaPrivativa','Área Privativa (m²)',10)}
+      ${field('unidades','Quantidade de Unidades',1)}
+      ${field('vagas','Quantidade de Vagas',1)}
+      ${field('precoM2','Preço Médio por m² (R$)',10)}
+      ${field('custoM2Obra','Custo de Obra por m² (R$)',10)}
+    </div>
+
+    <div class="section-label">Cronograma</div>
+    <div class="form-grid">
+      ${field('prazoObra','Prazo de Obra (meses)',1)}
+      ${field('prazoVendas','Prazo de Vendas (meses)',1)}
+      ${field('velocidadeVendas','Velocidade de Vendas (% a.m.)',0.1,'%')}
+      ${field('mesInicioVendas','Mês de Início das Vendas',1)}
+    </div>
+
+    <div class="section-label">Índices Macroeconômicos (% a.a.)</div>
+    <div class="form-grid">
+      ${field('incc','INCC',0.1,'%')}
+      ${field('ipca','IPCA',0.1,'%')}
+      ${field('selic','SELIC',0.1,'%')}
+      ${field('tma','TMA (Taxa Mínima de Atratividade)',0.1,'%')}
+      ${field('wacc','WACC',0.1,'%')}
+    </div>
+
+    <div class="section-label">Estrutura de Capital</div>
+    <div class="form-grid">
+      ${field('capitalProprioPct','Capital Próprio (%)',1,'%')}
+      ${field('taxaJurosFinanciamento','Taxa de Juros do Financiamento (% a.a.)',0.1,'%')}
+      ${field('custoTerrenoPctVGV','Custo do Terreno (% do VGV)',0.5,'%')}
+    </div>
+
+    <div class="section-label">Custos e Despesas (% sobre receita reconhecida)</div>
+    <div class="form-grid">
+      ${field('opexPct','OPEX',0.1,'%')}
+      ${field('custoAdminPct','Custos Administrativos',0.1,'%')}
+      ${field('custoComercialPct','Custos Comerciais',0.1,'%')}
+      ${field('custoJuridicoPct','Custos Jurídicos',0.1,'%')}
+      ${field('tributosPct','Tributos (RET)',0.1,'%')}
+      ${field('receitasAcessoriasPct','Receitas Acessórias',0.1,'%')}
+    </div>
+
+    <div class="section-label">Mix de Recebimento</div>
+    <div class="form-grid">
+      ${field('pctEntrada','Entrada (%)',1,'%')}
+      ${field('pctParcelas','Parcelas Mensais (%)',1,'%')}
+      ${field('pctRepasse','Repasse Bancário na Entrega (%)',1,'%')}
+    </div>
+  </div>
+  `;
+  root.querySelectorAll('input[data-key]').forEach(inp=>{
+    inp.addEventListener('change',(e)=>{
+      const k=e.target.dataset.key;
+      STATE.premises[k] = parseFloat(e.target.value);
+      const lab = e.target.closest('.field').querySelector('.val');
+      lab.textContent = e.target.value + (lab.textContent.includes('%')?'%':'');
+    });
+  });
+}
+
+/* ---------- 7.3 CRONOGRAMA ---------- */
+function renderCronograma(root){
+  const m = STATE.model;
+  root.innerHTML=`
+  <div class="view-header"><h2>Cronograma Físico-Financeiro</h2><p>Curvas de desembolso da obra e velocidade de vendas ao longo do tempo</p></div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Curva de Obra (Desembolso Mensal) <span class="hint">R$/mês, corrigido pelo INCC</span></div>
+      <div id="cronoObra" class="chart-box"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Curva de Vendas <span class="hint">unidades vendidas/mês</span></div>
+      <div id="cronoVendas" class="chart-box"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">VSO Acumulado ao Longo do Tempo</div>
+    <div id="cronoVSO" class="chart-box"></div>
+  </div>
+  <div class="table-wrap" style="margin-top:16px;">
+    <table>
+      <thead><tr><th>Mês</th><th>Unid. Vendidas</th><th>VSO Acum.</th><th>Custo Obra</th><th>Receita Reconhecida</th></tr></thead>
+      <tbody>
+        ${m.meses.filter(t=>t>0&&t<=Math.max(m.premises.prazoObra,m.premises.prazoVendas)).map(t=>{
+          let acumU=0; for(let k=1;k<=t;k++) acumU+=m.unidadesVendidasMes[k];
+          return `<tr><td>Mês ${t}</td><td>${fmt.num(m.unidadesVendidasMes[t],1)}</td><td>${fmt.pct(acumU/m.premises.unidades,1)}</td><td>${fmt.brl(m.custoObraMensal[t])}</td><td>${fmt.brl(m.receitaMensal[t])}</td></tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+  `;
+  renderBarChart(document.getElementById('cronoObra'), m.meses.slice(1,m.premises.prazoObra+1).map(t=>'M'+t), m.custoObraMensal.slice(1,m.premises.prazoObra+1),{height:220});
+  renderBarChart(document.getElementById('cronoVendas'), m.meses.slice(1,m.premises.prazoVendas+1).map(t=>'M'+t), m.unidadesVendidasMes.slice(1,m.premises.prazoVendas+1),{height:220});
+  const vsoAcum=[]; let ac=0;
+  for(let t=0;t<=m.premises.prazoVendas;t++){ ac+=m.unidadesVendidasMes[t]||0; vsoAcum.push(ac/m.premises.unidades); }
+  renderLineChart(document.getElementById('cronoVSO'), [{data:vsoAcum,color:'#c9a961',area:true}], {height:200});
+}
+
+/* ---------- 7.4 FLUXO DE CAIXA ---------- */
+function renderFluxo(root){
+  const m = STATE.model;
+  root.innerHTML=`
+  <div class="view-header"><h2>Fluxo de Caixa Mensal</h2><p>Demonstrativo completo — entradas, saídas e saldo do projeto</p></div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">Fluxo Operacional vs Saldo Acumulado</div>
+    <div id="fluxoChart" class="chart-box"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:#c9a961"></span>Saldo Acumulado</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:#2a4f82"></span>Fluxo Operacional Mensal</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Mês</th><th>Receita</th><th>Custo Obra</th><th>Terreno</th><th>Opex</th><th>Admin</th><th>Comercial</th><th>Tributos</th><th>Desp. Financeira</th><th>Fluxo Operacional</th><th>Saldo Acumulado</th>
+      </tr></thead>
+      <tbody>
+        ${m.meses.map(t=>`<tr>
+          <td>Mês ${t}</td>
+          <td class="pos-val">${fmt.brl(m.receitaMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.custoObraMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.custoTerrenoMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.opexMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.adminMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.comercialMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.tributosMensal[t])}</td>
+          <td class="neg-val">${fmt.brl(-m.despesaFinanceira[t])}</td>
+          <td class="${m.fluxoOperacional[t]>=0?'pos-val':'neg-val'}">${fmt.brl(m.fluxoOperacional[t])}</td>
+          <td class="${m.saldoAcumulado[t]>=0?'pos-val':'neg-val'}"><strong>${fmt.brl(m.saldoAcumulado[t])}</strong></td>
+        </tr>`).join('')}
+        <tr class="total-row">
+          <td>TOTAL</td>
+          <td>${fmt.brl(m.receitaMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.custoObraMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.custoTerrenoMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.opexMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.adminMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.comercialMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.tributosMensal.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(-m.despesaFinanceira.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(m.fluxoOperacional.reduce((a,b)=>a+b,0))}</td>
+          <td>${fmt.brl(m.saldoAcumulado[m.saldoAcumulado.length-1])}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  `;
+  const svg1 = document.getElementById('fluxoChart');
+  renderLineChart(svg1,[{data:m.saldoAcumulado,color:'#c9a961',area:true},{data:m.fluxoOperacional,color:'#2a4f82'}],{height:260});
+}
+
+/* ---------- 7.5 FLUXO DESCONTADO ---------- */
+function renderFCD(root){
+  const m = STATE.model;
+  const acumD=[]; let s=0; m.fluxoDescontado.forEach(v=>{s+=v;acumD.push(s);});
+  root.innerHTML=`
+  <div class="view-header"><h2>Fluxo de Caixa Descontado</h2><p>Valor presente dos fluxos futuros, descontados à TMA de ${fmt.pct(m.premises.tma/100,1)} a.a.</p></div>
+  <div class="grid grid-3" style="margin-bottom:16px;">
+    ${kpiCard('VPL Final', fmt.brlK(acumD[acumD.length-1]),'Convergência ao fim do horizonte','neutral')}
+    ${kpiCard('Payback Descontado', m.indicadores.paybackDescontado+' meses','mês em que o VPL acumulado se torna positivo','neutral')}
+    ${kpiCard('TMA Mensal Equivalente', fmt.pct(m.tmaM,3),'taxa mensal composta','neutral')}
+  </div>
+  <div class="card">
+    <div class="card-title">Convergência do VPL Acumulado</div>
+    <div id="fcdChart" class="chart-box"></div>
+  </div>
+  <div class="table-wrap" style="margin-top:16px;">
+    <table><thead><tr><th>Mês</th><th>Fluxo Livre</th><th>Fator de Desconto</th><th>Fluxo Descontado</th><th>VPL Acumulado</th></tr></thead>
+    <tbody>
+      ${m.meses.map(t=>`<tr><td>Mês ${t}</td><td>${fmt.brl(m.fluxoLivre[t])}</td><td>${(1/Math.pow(1+m.tmaM,t)).toFixed(4)}</td><td class="${m.fluxoDescontado[t]>=0?'pos-val':'neg-val'}">${fmt.brl(m.fluxoDescontado[t])}</td><td class="${acumD[t]>=0?'pos-val':'neg-val'}"><strong>${fmt.brl(acumD[t])}</strong></td></tr>`).join('')}
+    </tbody></table>
+  </div>
+  `;
+  renderLineChart(document.getElementById('fcdChart'),[{data:acumD,color:'#c9a961',area:true}],{height:260});
+}
+
+/* ---------- 7.6 INDICADORES ---------- */
+function renderIndicadores(root){
+  const ind = STATE.model.indicadores, imo=STATE.model.imobiliarios;
+  const rows = [
+    ['VPL (Valor Presente Líquido)', fmt.brl(ind.vpl), ind.vpl>0?'Cria valor':'Destrói valor', ind.vpl>0],
+    ['TIR (Taxa Interna de Retorno)', fmt.pct(ind.tirAnual,2), 'vs TMA '+fmt.pct(ind.tma/100,1), ind.tirAnual>ind.tma/100],
+    ['TIR Modificada (MIRR)', ind.mirrAnual!==null?fmt.pct(ind.mirrAnual,2):'—', 'considera reinvestimento à TMA', true],
+    ['Payback Simples', ind.paybackSimples+' meses', 'sem desconto', true],
+    ['Payback Descontado', ind.paybackDescontado+' meses', 'com desconto à TMA', true],
+    ['ROI', fmt.pct(ind.roi,1), 'retorno sobre investimento total', ind.roi>0],
+    ['ROIC', fmt.pct(ind.roic,1), 'retorno sobre capital investido', ind.roic>0],
+    ['Índice de Lucratividade', ind.indiceLucratividade.toFixed(2), '> 1,0 indica viabilidade', ind.indiceLucratividade>1],
+    ['Valor Futuro (VPL capitalizado)', fmt.brl(ind.valorFuturo), 'ao fim do horizonte', ind.valorFuturo>0],
+    ['EVA (Economic Value Added)', fmt.brl(ind.eva), 'geração de valor econômico', ind.eva>0],
+    ['MOIC', ind.moic?ind.moic.toFixed(2)+'x':'—', 'múltiplo sobre capital investido', ind.moic>1],
+    ['Margem Bruta', fmt.pct(ind.margemBruta,1), 'sobre receita realizada', ind.margemBruta>0.25],
+    ['Margem Líquida', fmt.pct(ind.margemLiquida,1), 'sobre receita realizada', ind.margemLiquida>0.1],
+    ['Lucro Líquido', fmt.brl(ind.lucroLiquido), 'resultado do empreendimento', ind.lucroLiquido>0],
+    ['EBITDA', fmt.brl(ind.ebitda), 'proxy operacional', ind.ebitda>0],
+    ['Ponto de Equilíbrio', fmt.int(ind.pontoEquilibrioUnid)+' unidades ('+fmt.pct(ind.pontoEquilibrioVSO,1)+' VSO)', 'quantidade mínima para cobrir custos', true],
+    ['Exposição Máxima de Caixa', fmt.brl(ind.exposicaoMaxima), 'pico de caixa negativo', true],
+    ['Capital Máximo Necessário', fmt.brl(ind.capitalMaximoNecessario), 'funding máximo exigido', true],
+    ['Necessidade de Capital de Giro', fmt.brl(ind.necessidadeCapitalGiro), 'estimativa de working capital', true],
+  ];
+  const rowsImo = [
+    ['Preço Médio da Unidade', fmt.brl(imo.precoMedio)],
+    ['Preço por m²', fmt.brl(imo.precoM2)],
+    ['VSO', fmt.pct(imo.vso,1)],
+    ['Receita Potencial (VGV)', fmt.brl(imo.receitaPotencial)],
+    ['Receita Realizada', fmt.brl(imo.receitaRealizada)],
+    ['Custo por Unidade', fmt.brl(imo.custoPorUnidade)],
+    ['Custo por m²', fmt.brl(imo.custoPorM2)],
+    ['Margem do Empreendimento', fmt.pct(imo.margemEmpreendimento,1)],
+    ['Lucro do Empreendimento', fmt.brl(imo.lucroEmpreendimento)],
+    ['Rentabilidade (s/ capital próprio)', fmt.pct(imo.rentabilidade,1)],
+    ['Lucratividade (s/ receita)', fmt.pct(imo.lucratividade,1)],
+  ];
+  root.innerHTML=`
+  <div class="view-header"><h2>Indicadores Financeiros</h2><p>Métricas consolidadas de retorno, risco e rentabilidade do empreendimento</p></div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Indicadores Financeiros</div>
+      <div class="table-wrap" style="border:none;">
+        <table><tbody>
+          ${rows.map(r=>`<tr><td style="text-align:left;">${r[0]}</td><td style="text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:700;">${r[1]}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Indicadores Imobiliários</div>
+      <div class="table-wrap" style="border:none;">
+        <table><tbody>
+          ${rowsImo.map(r=>`<tr><td style="text-align:left;">${r[0]}</td><td style="text-align:right;font-family:'IBM Plex Mono',monospace;font-weight:700;">${r[1]}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+/* ---------- 7.7 CENÁRIOS ---------- */
+function renderCenarios(root){
+  const models = STATE.models;
+  const scs = ['conservador','base','otimista'];
+  const labels={conservador:'Conservador',base:'Base',otimista:'Otimista'};
+  root.innerHTML=`
+  <div class="view-header"><h2>Análise de Cenários</h2><p>Todos os indicadores recalculados automaticamente para cada cenário</p></div>
+  <div class="grid grid-3" style="margin-bottom:16px;">
+    ${scs.map(sc=>{
+      const ind=models[sc].indicadores;
+      const active = sc===STATE.scenario;
+      return `<div class="card" style="${active?'border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,169,97,.25)':''}">
+        <div class="card-title">${labels[sc]} ${active?'<span class="hint">(ativo)</span>':''}</div>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:12.5px;">
+          <div style="display:flex;justify-content:space-between;"><span>VPL</span><strong class="mono ${ind.vpl>0?'pos-val':'neg-val'}">${fmt.brlK(ind.vpl)}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>TIR</span><strong class="mono">${fmt.pct(ind.tirAnual,2)}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Payback Desc.</span><strong class="mono">${ind.paybackDescontado} meses</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>ROI</span><strong class="mono">${fmt.pct(ind.roi,1)}</strong></div>
+          <div style="display:flex;justify-content:space-between;"><span>Margem Líquida</span><strong class="mono">${fmt.pct(ind.margemLiquida,1)}</strong></div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card">
+    <div class="card-title">Comparativo — VPL por Cenário</div>
+    <div id="cenChart" class="chart-box"></div>
+  </div>
+  <div class="table-wrap" style="margin-top:16px;">
+    <table>
+      <thead><tr><th>Indicador</th><th>Conservador</th><th>Base</th><th>Otimista</th></tr></thead>
+      <tbody>
+        <tr><td>VPL</td>${scs.map(sc=>`<td>${fmt.brl(models[sc].indicadores.vpl)}</td>`).join('')}</tr>
+        <tr><td>TIR</td>${scs.map(sc=>`<td>${fmt.pct(models[sc].indicadores.tirAnual,2)}</td>`).join('')}</tr>
+        <tr><td>Payback Descontado</td>${scs.map(sc=>`<td>${models[sc].indicadores.paybackDescontado} meses</td>`).join('')}</tr>
+        <tr><td>ROI</td>${scs.map(sc=>`<td>${fmt.pct(models[sc].indicadores.roi,1)}</td>`).join('')}</tr>
+        <tr><td>Margem Líquida</td>${scs.map(sc=>`<td>${fmt.pct(models[sc].indicadores.margemLiquida,1)}</td>`).join('')}</tr>
+        <tr><td>Lucro Líquido</td>${scs.map(sc=>`<td>${fmt.brl(models[sc].indicadores.lucroLiquido)}</td>`).join('')}</tr>
+      </tbody>
+    </table>
+  </div>
+  `;
+  renderBarChart(document.getElementById('cenChart'), scs.map(sc=>labels[sc]), scs.map(sc=>models[sc].indicadores.vpl), {height:220});
+}
+
+/* ---------- 7.8 SENSIBILIDADE ---------- */
+function renderSensibilidade(root){
+  root.innerHTML=`
+  <div class="view-header"><h2>Análise de Sensibilidade</h2><p>Matriz dinâmica de VPL e Tornado Chart de impacto das variáveis</p></div>
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">Matriz de Sensibilidade — VPL (R$)</div>
+    <div class="form-grid" style="grid-template-columns:repeat(2,220px);margin-bottom:16px;">
+      <div class="field"><label>Variável — Eixo X</label>
+        <select id="sensX">${SENS_VARS.map(v=>`<option value="${v.key}" ${v.key===STATE.sensVarX?'selected':''}>${v.label}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Variável — Eixo Y</label>
+        <select id="sensY">${SENS_VARS.map(v=>`<option value="${v.key}" ${v.key===STATE.sensVarY?'selected':''}>${v.label}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="chart-box" id="sensHeat"></div>
+    <div class="info-note" style="margin-top:14px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Cada célula representa o VPL resultante da variação simultânea das duas variáveis selecionadas, de -20% a +20%, mantendo as demais premissas constantes.
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Tornado Chart — Impacto no VPL (±10%)</div>
+    <div class="chart-box" id="tornadoChart"></div>
+  </div>
+  `;
+  const doSens = ()=>{
+    const vx=document.getElementById('sensX').value, vy=document.getElementById('sensY').value;
+    STATE.sensVarX=vx; STATE.sensVarY=vy;
+    const res = computeSensitivityMatrix(STATE.premises, vx, vy);
+    const lx = SENS_VARS.find(v=>v.key===vx).label, ly=SENS_VARS.find(v=>v.key===vy).label;
+    renderHeatmap(document.getElementById('sensHeat'), res.steps, res.grid, STATE.model.indicadores.vpl, lx, ly);
+  };
+  document.getElementById('sensX').addEventListener('change',doSens);
+  document.getElementById('sensY').addEventListener('change',doSens);
+  doSens();
+  const tor = computeTornado(STATE.premises);
+  renderTornado(document.getElementById('tornadoChart'), tor);
+}
+
+/* ---------- 7.9 MONTE CARLO ---------- */
+function renderMonteCarlo(root){
+  root.innerHTML=`
+  <div class="view-header"><h2>Simulação de Monte Carlo</h2><p>10.000 iterações com distribuição normal sobre preço, custo, inflação, prazo e velocidade de vendas</p></div>
+  <div class="info-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    Clique em "Executar Simulação" para processar 10.000 cenários aleatórios e gerar a distribuição probabilística de VPL e TIR.
+  </div>
+  <button class="btn btn-primary" id="btnRunMC" style="margin-bottom:18px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"/></svg>
+    Executar Simulação (10.000 iterações)
+  </button>
+  <div id="mcResults"></div>
+  `;
+  document.getElementById('btnRunMC').addEventListener('click', ()=>{
+    document.getElementById('mcResults').innerHTML = '<p style="color:var(--text-3);font-size:13px;">Processando 10.000 iterações...</p>';
+    setTimeout(()=>{
+      const res = runMonteCarlo(STATE.premises, 10000);
+      STATE.mcResult = res;
+      renderMCResults(res);
+    }, 50);
+  });
+  if(STATE.mcResult) renderMCResults(STATE.mcResult);
+}
+function renderMCResults(res){
+  const box = document.getElementById('mcResults');
+  box.innerHTML=`
+  <div class="grid grid-4" style="margin-bottom:16px;">
+    ${kpiCard('VPL Esperado (média)', fmt.brlK(res.npvMean), 'σ = '+fmt.brlK(res.npvStd), res.npvMean>0?'pos':'neg')}
+    ${kpiCard('Probabilidade de Sucesso', fmt.pct(res.probSucesso,1), 'VPL > 0', res.probSucesso>0.7?'pos':res.probSucesso>0.5?'neutral':'neg')}
+    ${kpiCard('Probabilidade de VPL Negativo', fmt.pct(res.probNeg,1), 'risco de destruição de valor', res.probNeg<0.2?'pos':'neg')}
+    ${kpiCard('TIR Média Simulada', fmt.pct(res.tirMean,2), 'P(TIR < TMA) = '+fmt.pct(res.probTirAbaixoTMA,1), 'neutral')}
+  </div>
+  <div class="grid grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">Distribuição do VPL <span class="hint">${res.iterations.toLocaleString('pt-BR')} iterações</span></div>
+      <div id="mcHistVPL" class="chart-box"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Distribuição da TIR</div>
+      <div id="mcHistTIR" class="chart-box"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Percentis do VPL</div>
+    <div class="table-wrap" style="border:none;">
+      <table><thead><tr><th>P5</th><th>P10</th><th>P25</th><th>P50 (Mediana)</th><th>P75</th><th>P90</th><th>P95</th></tr></thead>
+      <tbody><tr>
+        ${['p5','p10','p25','p50','p75','p90','p95'].map(k=>`<td>${fmt.brl(res.percentiles[k])}</td>`).join('')}
+      </tr></tbody></table>
+    </div>
+  </div>
+  `;
+  renderHistogram(document.getElementById('mcHistVPL'), res.npls, {colorByZero:true, width:520, height:230});
+  renderHistogram(document.getElementById('mcHistTIR'), res.tirs, {color:'#2a4f82', fmt:(v)=>fmt.pct(v,0), width:520, height:230});
+}
+
+/* ---------- 7.10 RELATÓRIOS ---------- */
+function gerarRecomendacao(m){
+  const ind=m.indicadores;
+  const spreadTIR = (ind.tirAnual - ind.tma/100)*100;
+  const frases=[];
+  frases.push(`A Taxa Interna de Retorno (TIR) do empreendimento é de ${fmt.pct(ind.tirAnual,2)}, ${spreadTIR>=0?'superando':'ficando abaixo de'} a Taxa Mínima de Atratividade (TMA) de ${fmt.pct(ind.tma/100,1)} em ${Math.abs(spreadTIR).toFixed(1)} pontos percentuais.`);
+  frases.push(`O Valor Presente Líquido (VPL) apurado é de ${fmt.brl(ind.vpl)}, o que indica que o projeto ${ind.vpl>0?'agrega valor econômico ao investidor':'destrói valor nas condições atuais de premissas'}.`);
+  frases.push(`O ROI de ${fmt.pct(ind.roi,1)} e a margem líquida de ${fmt.pct(ind.margemLiquida,1)} ${ind.roi>0.15?'demonstram retorno satisfatório frente ao capital investido':'sugerem retorno abaixo do patamar usualmente exigido para este tipo de empreendimento'}.`);
+  if(STATE.mcResult){
+    frases.push(`A simulação de Monte Carlo, com ${STATE.mcResult.iterations.toLocaleString('pt-BR')} iterações, indica probabilidade de sucesso (VPL positivo) de ${fmt.pct(STATE.mcResult.probSucesso,1)}, ${STATE.mcResult.probSucesso>0.7?'o que representa elevada margem de segurança':'sugerindo atenção ao nível de incerteza do projeto'}.`);
+  }
+  let recomendacao, justificativa;
+  const positivos = [ind.vpl>0, ind.tirAnual>ind.tma/100, ind.roi>0.12, !STATE.mcResult||STATE.mcResult.probSucesso>0.6].filter(Boolean).length;
+  if(positivos>=4){
+    recomendacao='APROVAÇÃO RECOMENDADA';
+    justificativa='Todos os principais indicadores financeiros — VPL, TIR, ROI e probabilidade de sucesso — apontam para viabilidade consistente do empreendimento, com margem de segurança adequada frente aos principais riscos identificados.';
+  } else if(positivos>=2){
+    recomendacao='APROVAÇÃO CONDICIONADA À REVISÃO DE PREMISSAS';
+    justificativa='O empreendimento apresenta viabilidade parcial. Recomenda-se revisão das premissas de maior sensibilidade (identificadas na análise de Tornado) antes da aprovação final, especialmente quanto a custo de obra e velocidade de vendas.';
+  } else {
+    recomendacao='NÃO RECOMENDADO NAS CONDIÇÕES ATUAIS';
+    justificativa='Os indicadores financeiros apurados não sustentam a viabilidade do empreendimento nas premissas atuais. Recomenda-se reestruturação do produto, renegociação de custos ou revisão da estratégia de precificação.';
+  }
+  return {frases, recomendacao, justificativa};
+}
+function renderRelatorios(root){
+  const m=STATE.model, ind=m.indicadores, imo=m.imobiliarios;
+  const rec = gerarRecomendacao(m);
+  const tor = computeTornado(STATE.premises).slice(0,3);
+  root.innerHTML=`
+  <div class="view-header"><h2>Relatório Executivo</h2><p>Parecer técnico gerado automaticamente com base nos resultados calculados</p></div>
+  <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px;">
+    <button class="btn" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Imprimir / Exportar PDF</button>
+  </div>
+  <div class="report">
+    <h3>Identificação do Empreendimento</h3>
+    <p>Empresa: Vifrancon Construtora &middot; Cenário analisado: ${STATE.scenario.toUpperCase()} &middot; Data do parecer: ${new Date().toLocaleDateString('pt-BR')}</p>
+    <p>${m.premises.unidades} unidades, ${fmt.num(m.premises.areaPrivativa,0)} m² de área privativa, VGV potencial de ${fmt.brl(imo.receitaPotencial)}.</p>
+
+    <h3>Resumo Financeiro</h3>
+    <p>VPL: <strong>${fmt.brl(ind.vpl)}</strong> &middot; TIR: <strong>${fmt.pct(ind.tirAnual,2)}</strong> &middot; Payback Descontado: <strong>${ind.paybackDescontado} meses</strong> &middot; ROI: <strong>${fmt.pct(ind.roi,1)}</strong></p>
+
+    <h3>Análise da Rentabilidade</h3>
+    <p>${rec.frases[0]}</p>
+    <p>${rec.frases[2]}</p>
+
+    <h3>Análise do Fluxo de Caixa</h3>
+    <p>A exposição máxima de caixa do projeto é de ${fmt.brl(ind.exposicaoMaxima)}, exigindo capital máximo de ${fmt.brl(ind.capitalMaximoNecessario)}. A necessidade de capital de giro estimada é de ${fmt.brl(ind.necessidadeCapitalGiro)}.</p>
+
+    <h3>Análise dos Indicadores</h3>
+    <p>${rec.frases[1]}</p>
+    <p>O Índice de Lucratividade de ${ind.indiceLucratividade.toFixed(2)} e o MOIC de ${ind.moic?ind.moic.toFixed(2)+'x':'—'} reforçam a leitura sobre a eficiência do capital investido.</p>
+
+    <h3>Principais Riscos (Tornado)</h3>
+    <p>As variáveis com maior impacto sobre o VPL são: ${tor.map(t=>t.label).join(', ')}. Recomenda-se monitoramento prioritário destes fatores durante a execução do empreendimento.</p>
+
+    ${STATE.mcResult?`<h3>Simulação de Monte Carlo</h3><p>${rec.frases[3]}</p>`:''}
+
+    <h3>Conclusão</h3>
+    <div class="rec-box">
+      <p style="font-weight:800;font-size:14.5px;color:var(--navy-900);margin-bottom:6px;">${rec.recomendacao}</p>
+      <p>${rec.justificativa}</p>
+    </div>
+  </div>
+  `;
+}
+
+/* ---------- 7.11 CONFIGURAÇÕES ---------- */
+function renderConfig(root){
+  root.innerHTML=`
+  <div class="view-header"><h2>Configurações</h2><p>Preferências do sistema e exportação de dados do modelo</p></div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Exportação de Dados</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn btn-primary" id="btnExportJSON">Exportar Premissas (JSON)</button>
+        <button class="btn" id="btnImportJSON">Importar Premissas (JSON)</button>
+        <button class="btn" id="btnExportCSV">Exportar Fluxo de Caixa (CSV)</button>
+        <button class="btn" id="btnResetDefaults">Restaurar Premissas Padrão</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sobre o Modelo</div>
+      <p style="font-size:12.5px;color:var(--text-2);line-height:1.7;">
+        Sistema de análise de viabilidade financeira para empreendimentos de incorporação imobiliária,
+        desenvolvido seguindo boas práticas internacionais de Financial Modeling (FAST Standard, FMI, CFI).
+        Motor de cálculo 100% client-side, sem dependências externas — todos os dados permanecem no navegador.
+      </p>
+      <div class="toggle-row"><span>Recalcular automaticamente ao editar premissas</span>
+        <label class="switch"><input type="checkbox" id="autoRecalc"><span class="slider-tg"></span></label>
+      </div>
+    </div>
+  </div>
+  `;
+  document.getElementById('btnExportJSON').addEventListener('click',()=>{
+    const blob = new Blob([JSON.stringify(STATE.premises,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='premissas_vifrancon.json'; a.click();
+  });
+  document.getElementById('btnImportJSON').addEventListener('click',()=>{
+    const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
+    inp.onchange = e=>{
+      const file=e.target.files[0]; if(!file) return;
+      const reader=new FileReader();
+      reader.onload = ev=>{ try{ STATE.premises = JSON.parse(ev.target.result); recalcAll(); alert('Premissas importadas com sucesso.'); }catch(err){ alert('Arquivo inválido.'); } };
+      reader.readAsText(file);
+    };
+    inp.click();
+  });
+  document.getElementById('btnExportCSV').addEventListener('click',()=>{
+    const m=STATE.model;
+    let csv='Mes;Receita;CustoObra;Opex;Admin;Comercial;Tributos;FluxoOperacional;SaldoAcumulado\n';
+    m.meses.forEach(t=>{
+      csv+=[t,m.receitaMensal[t],m.custoObraMensal[t],m.opexMensal[t],m.adminMensal[t],m.comercialMensal[t],m.tributosMensal[t],m.fluxoOperacional[t],m.saldoAcumulado[t]].map(v=>typeof v==='number'?v.toFixed(2):v).join(';')+'\n';
+    });
+    const blob = new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='fluxo_caixa_vifrancon.csv'; a.click();
+  });
+  document.getElementById('btnResetDefaults').addEventListener('click',()=>{
+    if(confirm('Restaurar todas as premissas para os valores padrão?')){
+      STATE.premises = defaultPremises(); recalcAll(); navigateTo('premissas');
+    }
+  });
+}
+
+/* -------------------------------------------------------------
+   8. INICIALIZAÇÃO
+------------------------------------------------------------- */
+function init(){
+  buildNav();
+  recalcAll();
+  navigateTo('dashboard');
+
+  document.querySelectorAll('.scenario-pill').forEach(el=>{
+    el.addEventListener('click',()=>{
+      document.querySelectorAll('.scenario-pill').forEach(p=>p.classList.remove('active'));
+      el.classList.add('active');
+      STATE.scenario = el.dataset.sc;
+      STATE.model = STATE.models[STATE.scenario];
+      renderView(STATE.currentView);
+    });
+  });
+
+  document.getElementById('btnRecalc').addEventListener('click',()=>{
+    recalcAll();
+    renderView(STATE.currentView);
+  });
+}
+init();
+</script>
+</body>
+</html>
